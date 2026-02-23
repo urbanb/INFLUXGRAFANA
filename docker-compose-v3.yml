@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  influxdb3:
+    build:
+      context: .
+      dockerfile: Dockerfile.influxdb3
+    container_name: influxdb3
+    restart: unless-stopped
+    ports:
+      - "8181:8181"
+    environment:
+      - INFLUXDB3_NODE_ID=docker-node
+      - INFLUXDB3_OBJECT_STORE=memory
+    volumes:
+      - influxdb3_data:/data
+    networks:
+      - monitoring
+    command: ["serve", "--node-id", "docker-node", "--object-store", "memory", "--http-bind", "0.0.0.0:8181"]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - influxdb3
+    networks:
+      - monitoring
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    restart: unless-stopped
+    volumes:
+      - ./telegraf/telegraf-docker.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      - influxdb3
+    networks:
+      - monitoring
+
+volumes:
+  influxdb3_data:
+  grafana_data:
+
+networks:
+  monitoring:
+    driver: bridge

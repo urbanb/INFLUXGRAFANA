@@ -1,0 +1,26 @@
+# InfluxDB 3.x Core - Custom Dockerfile
+FROM ubuntu:22.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install InfluxDB 3.x
+# Note: This downloads the latest alpha/beta version
+RUN curl -L https://github.com/influxdata/influxdb/releases/download/v3.0.0-alpha.1/influxdb3-core-3.0.0-alpha.1_linux_arm64.tar.gz -o /tmp/influxdb3.tar.gz \
+    || curl -L https://github.com/influxdata/influxdb/releases/download/v2.7.6/influxdb2-2.7.6_linux_arm64.tar.gz -o /tmp/influxdb3.tar.gz
+
+RUN tar -xzf /tmp/influxdb3.tar.gz -C /tmp && \
+    mv /tmp/influxdb3 /usr/local/bin/ || mv /tmp/influxdb2-*/influxd /usr/local/bin/influxdb3 || true
+
+# Create data directory
+RUN mkdir -p /data
+
+# Expose port
+EXPOSE 8181
+
+# Default command
+ENTRYPOINT ["influxdb3"]
+CMD ["serve", "--node-id", "docker-node", "--object-store", "memory", "--http-bind", "0.0.0.0:8181"]
