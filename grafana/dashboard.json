@@ -1,0 +1,125 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "openclaw-metrics",
+    "title": "OpenClaw Metrics Dashboard",
+    "tags": ["openclaw", "influxdb", "metrics"],
+    "timezone": "Europe/Berlin",
+    "schemaVersion": 38,
+    "refresh": "5s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Session Events",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT * FROM session_event WHERE time >= now() - 1h",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {"drawStyle": "line", "lineInterpolation": "linear"},
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Tool Usage (Total)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT COUNT(*) FROM tool_usage WHERE time >= now() - 1h",
+            "refId": "B"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Messages Sent",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT SUM(count) FROM message_activity WHERE time >= now() - 1h",
+            "refId": "C"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Tool Usage by Type",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT COUNT(*) FROM tool_usage WHERE time >= now() - 24h GROUP BY tool",
+            "refId": "D"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Message Activity (24h)",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT SUM(count) FROM message_activity WHERE time >= now() - 24h GROUP BY time(1h), type",
+            "refId": "E"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Success Rate (Tools)",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 16},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT COUNT(*) FROM tool_usage WHERE success = 'true' AND time >= now() - 24h",
+            "refId": "F"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 70},
+                {"color": "green", "value": 90}
+              ]
+            },
+            "unit": "percent"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Recent Sessions",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 18, "x": 6, "y": 16},
+        "datasource": {"type": "influxdb", "uid": "influxdb3"},
+        "targets": [
+          {
+            "query": "SELECT * FROM session_event ORDER BY time DESC LIMIT 20",
+            "refId": "G"
+          }
+        ]
+      }
+    ]
+  }
+}
