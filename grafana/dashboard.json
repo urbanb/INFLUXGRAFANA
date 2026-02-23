@@ -22,7 +22,7 @@
       }
     ]
   },
-  "description": "OpenClaw System Metrics Dashboard",
+  "description": "OpenClaw System Metrics Dashboard - Korrigierte SQL Queries",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -58,7 +58,7 @@
           "mappings": [],
           "max": 100,
           "min": 0,
-          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "red", "value": 80}]},
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "yellow", "value": 70}, {"color": "red", "value": 90}]},
           "unit": "percent"
         },
         "overrides": []
@@ -72,11 +72,11 @@
       "targets": [
         {
           "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
-          "query": "SELECT time, 100 - usage_idle as usage_percent FROM cpu WHERE cpu = 'cpu-total' AND time >= now() - INTERVAL '1 hour' ORDER BY time",
+          "query": "SELECT time, 100.0 - usage_idle as cpu_usage, cpu FROM cpu WHERE time >= now() - INTERVAL '1 hour' ORDER BY time",
           "refId": "A"
         }
       ],
-      "title": "CPU Usage (%)",
+      "title": "CPU Usage by Core (%)",
       "type": "timeseries"
     },
     {
@@ -113,7 +113,7 @@
           "refId": "B"
         }
       ],
-      "title": "Memory Usage",
+      "title": "Memory Usage %",
       "type": "stat"
     },
     {
@@ -123,7 +123,7 @@
           "color": {"mode": "thresholds"},
           "mappings": [],
           "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]},
-          "unit": "bytes"
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -179,7 +179,7 @@
           },
           "mappings": [],
           "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
-          "unit": "bytes"
+          "unit": "decbytes"
         },
         "overrides": []
       },
@@ -192,11 +192,11 @@
       "targets": [
         {
           "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
-          "query": "SELECT time, used FROM mem WHERE time >= now() - INTERVAL '1 hour' ORDER BY time",
+          "query": "SELECT time, used, available FROM mem WHERE time >= now() - INTERVAL '1 hour' ORDER BY time",
           "refId": "D"
         }
       ],
-      "title": "Memory Usage Over Time",
+      "title": "Memory Usage (Used vs Available)",
       "type": "timeseries"
     },
     {
@@ -224,7 +224,7 @@
           "refId": "E"
         }
       ],
-      "title": "Tool Usage Distribution",
+      "title": "Tool Usage (24h)",
       "type": "piechart"
     },
     {
@@ -278,8 +278,8 @@
               {
                 "id": "mappings",
                 "value": [
-                  {"options": {"from": "", "result": {"color": "green", "index": 0, "text": "✅"}, "to": "", "type": 2}, "type": "value"},
-                  {"options": {"from": "", "result": {"color": "red", "index": 1, "text": "❌"}, "to": "", "type": 2}, "type": "value"}
+                  {"options": {"true": {"color": "green", "index": 0, "text": "✅"}}, "type": "value"},
+                  {"options": {"false": {"color": "red", "index": 1, "text": "❌"}}, "type": "value"}
                 ]
               }
             ]
@@ -313,8 +313,8 @@
   "time": {"from": "now-1h", "to": "now"},
   "timepicker": {},
   "timezone": "Europe/Berlin",
-  "title": "OpenClaw System Metrics Dashboard v2",
-  "uid": "openclaw-system-metrics",
-  "version": 2
+  "title": "OpenClaw Metrics Dashboard v3",
+  "uid": "openclaw-metrics-v3",
+  "version": 3
 }
 EOF
