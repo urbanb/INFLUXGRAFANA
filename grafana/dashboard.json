@@ -13,10 +13,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "grafana",
-          "uid": "-- Grafana --"
-        },
+        "datasource": {"type": "grafana", "uid": "-- Grafana --"},
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -25,7 +22,7 @@
       }
     ]
   },
-  "description": "OpenClaw Metrics Dashboard für InfluxDB",
+  "description": "OpenClaw Metrics Dashboard für InfluxDB 3.0",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -33,15 +30,10 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
+          "color": {"mode": "palette-classic"},
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -52,68 +44,33 @@
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
+            "hideFrom": {"legend": false, "tooltip": false, "viz": false},
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
+            "scaleDistribution": {"type": "linear"},
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "stacking": {"group": "A", "mode": "none"},
+            "thresholdsStyle": {"mode": "off"}
           },
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
       "id": 1,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true},
+        "tooltip": {"mode": "multi", "sort": "none"}
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT * FROM session_event WHERE time >= now() - 1h",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT time, agent, event_type, value FROM session_event WHERE time >= now() - INTERVAL '1 hour' ORDER BY time DESC",
           "refId": "A"
         }
       ],
@@ -121,35 +78,17 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": {"mode": "thresholds"},
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 12,
-        "y": 0
-      },
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
       "id": 2,
       "options": {
         "colorMode": "value",
@@ -157,13 +96,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -171,11 +104,8 @@
       "pluginVersion": "11.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT COUNT(*) FROM tool_usage WHERE time >= now() - 1h",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT COUNT(*) as count FROM tool_usage WHERE time >= now() - INTERVAL '1 hour'",
           "refId": "B"
         }
       ],
@@ -183,35 +113,17 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": {"mode": "thresholds"},
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              }
-            ]
-          },
+          "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]},
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 0
-      },
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
       "id": 3,
       "options": {
         "colorMode": "value",
@@ -219,13 +131,7 @@
         "justifyMode": "auto",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
         "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
@@ -233,11 +139,8 @@
       "pluginVersion": "11.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT SUM(count) FROM message_activity WHERE time >= now() - 1h",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT SUM(count) as total FROM message_activity WHERE time >= now() - INTERVAL '1 hour'",
           "refId": "C"
         }
       ],
@@ -245,59 +148,27 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
+          "color": {"mode": "palette-classic"},
+          "custom": {"hideFrom": {"legend": false, "tooltip": false, "viz": false}},
           "mappings": []
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
       "id": 4,
       "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "right",
-          "showLegend": true
-        },
+        "legend": {"displayMode": "list", "placement": "right", "showLegend": true},
         "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": true},
+        "tooltip": {"mode": "single", "sort": "none"}
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT COUNT(*) FROM tool_usage WHERE time >= now() - 24h GROUP BY tool",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT tool, COUNT(*) as usage_count FROM tool_usage WHERE time >= now() - INTERVAL '24 hours' GROUP BY tool",
           "refId": "D"
         }
       ],
@@ -305,15 +176,10 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
+          "color": {"mode": "palette-classic"},
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
@@ -324,68 +190,33 @@
             "drawStyle": "line",
             "fillOpacity": 10,
             "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
+            "hideFrom": {"legend": false, "tooltip": false, "viz": false},
             "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
+            "scaleDistribution": {"type": "linear"},
             "showPoints": "never",
             "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "stacking": {"group": "A", "mode": "none"},
+            "thresholdsStyle": {"mode": "off"}
           },
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 8
-      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
       "id": 5,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
+        "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true},
+        "tooltip": {"mode": "multi", "sort": "none"}
       },
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT SUM(count) FROM message_activity WHERE time >= now() - 24h GROUP BY time(1h), type",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT DATE_BIN(INTERVAL '1 hour', time) as hour, type, SUM(count) as total FROM message_activity WHERE time >= now() - INTERVAL '24 hours' GROUP BY DATE_BIN(INTERVAL '1 hour', time), type ORDER BY hour",
           "refId": "E"
         }
       ],
@@ -393,57 +224,32 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
+          "color": {"mode": "thresholds"},
           "mappings": [],
           "max": 100,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 70
-              },
-              {
-                "color": "green",
-                "value": 90
-              }
+              {"color": "red", "value": null},
+              {"color": "yellow", "value": 70},
+              {"color": "green", "value": 90}
             ]
           },
           "unit": "percent"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 0,
-        "y": 16
-      },
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 16},
       "id": 6,
       "options": {
         "minVizHeight": 75,
         "minVizWidth": 75,
         "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
         "sizing": "auto"
@@ -451,11 +257,8 @@
       "pluginVersion": "11.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT COUNT(*) FROM tool_usage WHERE success = 'true' AND time >= now() - 24h",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT COUNT(*) as success_count FROM tool_usage WHERE success = 'true' AND time >= now() - INTERVAL '24 hours'",
           "refId": "F"
         }
       ],
@@ -463,68 +266,29 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "${DS_INFLUXDB}"
-      },
+      "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
+          "color": {"mode": "thresholds"},
+          "custom": {"align": "auto", "cellOptions": {"type": "auto"}, "inspect": false},
           "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 18,
-        "x": 6,
-        "y": 16
-      },
+      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 16},
       "id": 7,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
+        "footer": {"countRows": false, "fields": "", "reducer": ["sum"], "show": false},
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "time"
-          }
-        ]
+        "sortBy": [{"desc": true, "displayName": "time"}]
       },
       "pluginVersion": "11.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "${DS_INFLUXDB}"
-          },
-          "query": "SELECT * FROM session_event ORDER BY time DESC LIMIT 20",
+          "datasource": {"type": "influxdb", "uid": "${DS_INFLUXDB}"},
+          "query": "SELECT time, agent, event_type, value FROM session_event ORDER BY time DESC LIMIT 20",
           "refId": "G"
         }
       ],
@@ -535,16 +299,11 @@
   "refresh": "5s",
   "schemaVersion": 38,
   "tags": ["openclaw", "influxdb", "metrics"],
-  "templating": {
-    "list": []
-  },
-  "time": {
-    "from": "now-6h",
-    "to": "now"
-  },
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
   "timepicker": {},
   "timezone": "Europe/Berlin",
   "title": "OpenClaw Metrics Dashboard",
   "uid": "openclaw-metrics",
-  "version": 1
+  "version": 2
 }
